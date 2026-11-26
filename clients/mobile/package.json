@@ -1,0 +1,36 @@
+{
+  "name": "@ai-assistant/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "engines": {
+    "node": "^20.19.4 || ^22.13.0 || ^24.3.0 || >=25.0.0"
+  },
+  "scripts": {
+    "contracts": "npm --prefix ../../packages/contracts run build",
+    "prestart": "npm run contracts",
+    "start": "expo start",
+    "pretypecheck": "npm run contracts",
+    "typecheck": "tsc --noEmit",
+    "test:pdf": "tsc --ignoreConfig --target ES2022 --module CommonJS --lib ES2022,DOM --strict --skipLibCheck --outDir .expo/project-pdf-test lib/project-pdf.ts && node --test tests/project-pdf.test.cjs",
+    "prebundle:android": "npm run contracts",
+    "bundle:android": "expo export --platform android --output-dir dist/android",
+    "prebundle:ios": "npm run contracts",
+    "bundle:ios": "expo export --platform ios --output-dir dist/ios"
+  },
+  "dependencies": {
+    "expo": "56.0.24",
+    "expo-camera": "56.0.8",
+    "expo-crypto": "~56.0.5",
+    "expo-file-system": "56.0.11",
+    "expo-image-manipulator": "56.0.26",
+    "expo-secure-store": "~56.0.4",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-safe-area-context": "~5.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "typescript": "6.0.3"
+  }
+}

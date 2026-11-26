@@ -1,0 +1,55 @@
+@origin = http://127.0.0.1:18080
+@api = {{origin}}/api/assistant/v1
+@accessToken = replace-with-local-session-token
+@workspaceId = replace-with-local-workspace-id
+@conversationId = replace-with-local-conversation-id
+@runId = replace-with-local-run-id
+
+### Anonymous capability discovery
+GET {{api}}/capabilities
+Accept: application/json
+
+### Register a synthetic account
+POST {{api}}/auth/register
+Content-Type: application/json
+
+{"username":"sample_user","password":"sample-password-for-test"}
+
+### Fetch the signed-in account
+GET {{api}}/auth/me
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}
+
+### Create a conversation
+POST {{api}}/conversations
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}
+Content-Type: application/json
+
+{"title":"合成会话"}
+
+### Start a run. Reuse this key only for a retry of the identical request.
+POST {{api}}/conversations/{{conversationId}}/runs
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}
+Idempotency-Key: example-send-001
+Content-Type: application/json
+
+{"action":"send","content":"你好"}
+
+### Resume after the last applied event
+GET {{api}}/runs/{{runId}}/events
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}
+Accept: text/event-stream
+Last-Event-ID: 1
+
+### Fetch the snapshot on cursor expiry
+GET {{api}}/runs/{{runId}}
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}
+
+### Explicitly request cancellation
+POST {{api}}/runs/{{runId}}/cancel
+Authorization: Bearer {{accessToken}}
+X-Workspace-Id: {{workspaceId}}

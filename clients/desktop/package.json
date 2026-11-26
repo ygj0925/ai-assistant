@@ -1,0 +1,22 @@
+{
+  "name": "qingyu-assistant-desktop",
+  "productName": "青屿助手",
+  "version": "0.1.0",
+  "private": true,
+  "description": "青屿助手桌面宿主",
+  "main": "src/main.cjs",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/policy.test.cjs tests/workbench.test.cjs tests/companion.test.cjs",
+    "test:electron": "node tests/run-electron-smoke.cjs",
+    "test:workbench": "node tests/run-electron-smoke.cjs workbench",
+    "test:package": "node --test tests/package-smoke.cjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@electron/fuses": "2.1.3",
+    "@electron/packager": "20.3.0",
+    "electron": "45.4.1"
+  }
+}

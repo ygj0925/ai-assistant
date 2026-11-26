@@ -1,0 +1,14 @@
+: keep-alive
+
+id: 1
+event: run.started
+data: {"runId":"run_example","sequence":1,"type":"run.started"}
+
+id: 2
+event: message.delta
+data: {"runId":"run_example","sequence":2,"type":"message.delta","delta":"你好！"}
+
+id: 3
+event: run.completed
+data: {"runId":"run_example","sequence":3,"type":"run.completed","messageId":"message_example"}
+

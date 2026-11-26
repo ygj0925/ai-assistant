@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>青屿 · 本地代码工作台</title>
+  <link rel="stylesheet" href="ui.css">
+  <script src="renderer.js" defer></script>
+  <script src="companion.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wordmark">青屿助手</div>
+    <h1>本地代码工作台</h1>
+  </header>
+  <main>
+    <section class="scope" aria-labelledby="scope-heading">
+      <div>
+        <h2 id="scope-heading">样例目录</h2>
+        <p id="scope-value">选择含 <code>qingyu-workbench.json</code> 和 <code>main.cjs</code> 的自有样例目录。</p>
+      </div>
+      <div class="actions">
+        <button id="choose" class="primary" type="button">选择样例目录</button>
+        <button id="clear" type="button" hidden>撤销目录授权</button>
+      </div>
+    </section>
+    <p id="status" class="status" role="status"></p>
+    <p id="error" class="error" role="alert"></p>
+    <div id="workspace" class="workspace" hidden>
+      <section class="panel editor" aria-labelledby="editor-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="editor-heading">编辑样例</h2>
+            <p>会话内编辑副本</p>
+          </div>
+          <span id="head-revision" class="tag"></span>
+        </div>
+        <label for="source"><code>main.cjs</code></label>
+        <textarea id="source" aria-describedby="size" spellcheck="false" autocapitalize="off" maxlength="32768"></textarea>
+        <p id="size" class="measure"></p>
+        <div class="actions">
+          <button id="save" class="primary" type="button">保存修订</button>
+          <button id="restore" type="button">恢复当前修订</button>
+        </div>
+      </section>
+      <section class="panel review" aria-labelledby="review-heading">
+        <div class="section-head">
+          <h2 id="review-heading">差异与审阅</h2>
+          <span id="review-status" class="tag"></span>
+        </div>
+        <label for="revision">查看修订</label>
+        <select id="revision"></select>
+        <p id="diff-summary"></p>
+        <ol id="diff" aria-label="逐行差异" tabindex="0" hidden></ol>
+        <details id="literal-version" hidden>
+          <summary>查看此修订源码</summary>
+          <pre id="literal-source" tabindex="0"></pre>
+        </details>
+        <div class="actions">
+          <button id="approve" class="primary" type="button">确认审阅当前修订</button>
+        </div>
+      </section>
+      <section class="panel validation" aria-labelledby="verify-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="verify-heading">语法编译验证</h2>
+            <p>用本机 V8 检查已审阅版本的 JavaScript 语法。应用运行测试需在项目环境单独完成。</p>
+          </div>
+          <span id="build-status" class="tag"></span>
+        </div>
+        <div class="actions">
+          <button id="verify" class="primary" type="button">验证已审阅修订</button>
+          <button id="export" type="button">导出验证报告</button>
+        </div>
+        <div id="build-details" hidden>
+          <dl>
+            <div><dt>修订</dt><dd id="build-revision"></dd></div>
+            <div><dt>编译器</dt><dd id="compiler"></dd></div>
+            <div><dt>源代码 SHA-256</dt><dd id="source-hash" class="hash"></dd></div>
+            <div><dt>编译缓存</dt><dd id="cache-size"></dd></div>
+          </dl>
+          <p id="diagnostics" class="error"></p>
+        </div>
+      </section>
+    </div>
+    <section id="companion" class="panel companion" aria-labelledby="companion-heading" hidden>
+      <div class="section-head">
+        <div>
+          <h2 id="companion-heading">桌面接续</h2>
+          <p>用同一账号的手机核对并批准当前已审阅修订。桌面确认后才会启动本地语法验证。</p>
+        </div>
+        <button id="companion-logout" type="button" hidden>退出桌面接续</button>
+      </div>
+      <p id="companion-notice" class="status" role="status"></p>
+      <p id="companion-error" class="error" role="alert"></p>
+      <form id="companion-login" autocomplete="off">
+        <label>青屿账号<input id="companion-account" name="username" maxlength="32" required autocomplete="off"></label>
+        <label>密码<input id="companion-password" type="password" name="password" maxlength="72" required autocomplete="off"></label>
+        <button class="primary" type="submit">登录桌面接续</button>
+      </form>
+      <div id="companion-signed" class="companion-stack" hidden>
+        <p id="companion-pair"></p>
+        <div class="actions">
+          <button id="companion-offer" type="button">生成手机配对码</button>
+          <button id="companion-confirm" class="primary" type="button" hidden>确认手机配对</button>
+          <button id="companion-unpair" type="button" hidden>解除手机配对</button>
+        </div>
+        <p id="companion-code" class="hash" hidden></p>
+        <p id="companion-task" class="hash" hidden></p>
+        <div class="actions">
+          <button id="companion-publish" type="button" hidden>交给手机核对当前修订</button>
+          <button id="companion-build" class="primary" type="button" hidden>按手机批准验证</button>
+        </div>
+        <details id="companion-history" hidden>
+          <summary>查看本次桌面会话的接续记录</summary>
+          <ul id="companion-audit"></ul>
+        </details>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

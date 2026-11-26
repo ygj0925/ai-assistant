@@ -1,0 +1,43 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+def mandarinProperty = providers.gradleProperty('qingyuOfflineMandarinDir')
+def mandarin = mandarinProperty.isPresent() ? file(mandarinProperty.get()) : null
+if (mandarin != null) {
+  def assets = new groovy.json.JsonSlurper().parse(file('mandarin-assets.json'))
+  def actualFiles = fileTree(mandarin).files.collect {
+    mandarin.toPath().relativize(it.toPath()).toString().replace('\\', '/')
+  }.toSet()
+  if (actualFiles != assets.files.keySet()) {
+    throw new GradleException('Optional Mandarin asset directory does not match mandarin-assets.json.')
+  }
+  assets.files.each { relativePath, expected ->
+    def prepared = new File(mandarin, relativePath)
+    if (!prepared.isFile() || prepared.length() != expected.bytes ||
+        java.security.MessageDigest.getInstance('SHA-256').digest(prepared.bytes).encodeHex().toString() != expected.sha256) {
+      throw new GradleException("Unverified optional Mandarin asset: ${relativePath}. Run prepare-mandarin.py.")
+    }
+  }
+}
+
+android {
+  namespace 'dev.assistant.qingyu.dictation'
+  defaultConfig {
+    versionCode 1
+    versionName '0.1.0'
+  }
+  sourceSets.release.java.srcDir('src/system/java')
+  sourceSets.debug.java.srcDir(mandarin == null ? 'src/system/java' : 'src/mandarin/java')
+  if (mandarin != null) {
+    sourceSets.debug.assets.srcDir(new File(mandarin, 'assets'))
+    sourceSets.debug.jniLibs.srcDir(new File(mandarin, 'jni'))
+  }
+}
+
+if (mandarin != null) {
+  dependencies {
+    debugImplementation files(new File(mandarin, 'classes.jar'))
+  }
+}

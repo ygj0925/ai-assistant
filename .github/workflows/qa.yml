@@ -1,0 +1,132 @@
+name: Quality checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts-and-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Test the contracts and Web client
+        run: node qa/verify.mjs --only contracts,web --with-browser-deps
+      - name: Verify offline model evaluation fixtures
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p qa/verify-results/m0-model
+          node qa/m0-model-probe.mjs mock text > qa/verify-results/m0-model/text.json
+          node qa/m0-model-probe.mjs mock vision > qa/verify-results/m0-model/vision.json
+      - name: Check document worker framing and text limits
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          mkdir -p qa/verify-results/document-worker
+          python3 -B -m unittest discover -s services/document-worker/tests -v 2>&1 |
+            tee qa/verify-results/document-worker/contract-tests.log
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: assistant-quality-results
+          path: |
+            qa/verify-results/
+            clients/web/test-results/
+          retention-days: 14
+          if-no-files-found: error
+
+  mobile-and-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      EXPO_NO_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Test desktop origin and permission policy
+        run: npm --prefix clients/desktop test
+      - name: Install locked contract and mobile packages
+        run: |
+          npm --prefix packages/contracts ci
+          npm --prefix clients/mobile ci
+      - name: Type-check and bundle the mobile client
+        run: |
+          npm --prefix clients/mobile run typecheck
+          npm --prefix clients/mobile run bundle:android
+          npm --prefix clients/mobile run bundle:ios
+
+  backend:
+    if: >-
+      ${{
+        github.ref == 'refs/heads/main'
+        && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        && (vars.ASSISTANT_BACKEND_REPOSITORY != '' || vars.ASSISTANT_BACKEND_COMMIT != '')
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BACKEND_REPOSITORY: ${{ vars.ASSISTANT_BACKEND_REPOSITORY }}
+      BACKEND_COMMIT: ${{ vars.ASSISTANT_BACKEND_COMMIT }}
+    steps:
+      - name: Check the backend source configuration
+        shell: bash
+        run: |
+          if [[ ! "$BACKEND_REPOSITORY" =~ ^[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+$ ]] || [[ ! "$BACKEND_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+            echo 'Configure the independent backend repository and its full commit SHA.' >&2
+            exit 1
+          fi
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Check out the independent backend
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ vars.ASSISTANT_BACKEND_REPOSITORY }}
+          ref: ${{ vars.ASSISTANT_BACKEND_COMMIT }}
+          path: services/api
+          token: ${{ secrets.ASSISTANT_BACKEND_READ_TOKEN || github.token }}
+          persist-credentials: false
+      - name: Verify the checked out backend version
+        shell: bash
+        run: |
+          actual=$(git -C services/api rev-parse HEAD)
+          if [[ "$actual" != "$BACKEND_COMMIT" ]]; then
+            echo 'Independent backend checkout differs from the configured commit.' >&2
+            exit 1
+          fi
+          printf 'Independent backend commit %s\n' "$actual"
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: 21.0.10
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Test and package the backend
+        run: node qa/verify.mjs --only backend
+      - name: Upload backend test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: assistant-backend-quality-results
+          path: qa/verify-results/
+          retention-days: 14
+          if-no-files-found: ignore

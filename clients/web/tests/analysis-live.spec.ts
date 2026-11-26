@@ -1,0 +1,47 @@
+import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+
+test("analyzes a private CSV column and downloads every observed numeric row", async ({ page }) => {
+  test.skip(!process.env.ASSISTANT_WEB_TEST_API_ORIGIN || process.env.ASSISTANT_WEB_TEST_ANALYSIS !== "true",
+    "Requires loopback private project resources and CSV analysis.");
+  await page.goto("/");
+  await page.getByRole("button", { name: "创建账号", exact: true }).click();
+  await page.getByLabel("用户名").fill(`qa-csv-web-${Date.now().toString(36)}`);
+  await page.getByLabel("密码", { exact: true }).fill("Qa.Analysis-fixture-2026!");
+  await page.getByRole("button", { name: "创建账号", exact: true }).click();
+  await page.getByRole("button", { name: "项目", exact: true }).click();
+  const projects = page.getByRole("dialog", { name: "项目", exact: true });
+  await projects.getByRole("button", { name: "新建项目" }).click();
+  const editor = page.getByRole("dialog", { name: "新建项目" });
+  await editor.getByLabel("项目名称").fill("合成数值分析");
+  await editor.getByRole("button", { name: "保存", exact: true }).click();
+  await projects.getByRole("button", { name: "查看项目资料 合成数值分析" }).click();
+  const resources = page.getByRole("dialog", { name: "项目资料" });
+  await resources.getByRole("button", { name: "添加资料" }).click();
+  const csv = '数量,说明\n1.50,"保留,引号"\n-2.5,负数\n,空白\n4,末行\n';
+  await resources.getByLabel("选择 UTF-8 文本文件").setInputFiles({ name: "模拟表.csv", mimeType: "text/csv", buffer: Buffer.from(csv) });
+  await expect(resources.getByLabel("资料文本")).toHaveValue(csv);
+  await resources.getByRole("button", { name: "保存资料" }).click();
+  await resources.getByRole("button", { name: "分析 CSV", exact: true }).click();
+  const analysis = page.getByRole("dialog", { name: "分析 CSV" });
+  await analysis.getByLabel("数值列名称").fill("不存在");
+  await analysis.getByRole("button", { name: "开始分析" }).click();
+  await expect(analysis.getByRole("alert")).toBeVisible();
+  await analysis.getByLabel("数值列名称").fill("数量");
+  await analysis.getByRole("button", { name: "开始分析" }).click();
+  const result = analysis.getByRole("region", { name: "分析结果" });
+  await expect(result.getByText("平均值", { exact: true }).locator("..").locator("dd")).toHaveText("1");
+  await expect(result.getByText("跳过空白 1 行", { exact: false })).toBeVisible();
+  await expect(result.getByRole("list", { name: "逐行数值" }).getByRole("listitem")).toHaveCount(3);
+  await expect(result.getByText("第 4 行", { exact: true })).toBeVisible();
+  const received = page.waitForEvent("download");
+  await result.getByRole("button", { name: "下载分析 CSV" }).click();
+  const artifact = await received;
+  expect(artifact.suggestedFilename()).toBe("analysis.csv");
+  expect(await readFile(await artifact.path(), "utf8")).toBe("row,value\r\n1,1.5\r\n2,-2.5\r\n4,4\r\n");
+  await artifact.delete();
+  await analysis.getByRole("button", { name: "关闭", exact: true }).click();
+  await resources.getByRole("button", { name: "关闭", exact: true }).click();
+  await projects.getByRole("button", { name: "关闭", exact: true }).click();
+  await page.getByRole("button", { name: "退出登录" }).click();
+});

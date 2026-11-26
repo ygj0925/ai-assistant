@@ -1,0 +1,7 @@
+# The backend has its own Git history and working tree.
+/services/api/
+/qa/verify-results/
+
+.env
+.env.*
+!.env.example

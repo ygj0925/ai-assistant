@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "青屿助手",
+    "slug": "ai-assistant-mobile",
+    "version": "0.1.0",
+    "orientation": "default",
+    "plugins": [
+      "expo-secure-store",
+      ["expo-camera", {
+        "cameraPermission": "允许青屿助手拍摄项目图像。照片只会在你点击上传后发送。",
+        "microphonePermission": false,
+        "recordAudioAndroid": false,
+        "barcodeScannerEnabled": false
+      }]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.assistant.qingyu"
+    },
+    "android": {
+      "package": "dev.assistant.qingyu"
+    }
+  }
+}
