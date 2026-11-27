@@ -7,7 +7,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 const [baseUrl, checkpointDir] = process.argv.slice(2);
 const base = new URL(baseUrl);
 assert.ok(base.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(base.hostname)
-  && base.port && base.port !== '18080' && base.pathname === '/' && !base.username && !base.password
+  && base.port && !['18080', '18090'].includes(base.port) && base.pathname === '/' && !base.username && !base.password
   && !base.search && !base.hash && checkpointDir, 'Use a dedicated loopback QA fixture.');
 const folder = resolve(checkpointDir);
 await mkdir(folder, { recursive: true });

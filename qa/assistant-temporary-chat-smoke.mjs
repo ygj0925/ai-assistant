@@ -5,7 +5,7 @@ const [address, mode = 'enabled'] = process.argv.slice(2);
 const origin = new URL(address);
 assert.ok(['http:', 'https:'].includes(origin.protocol) &&
   ['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) &&
-  origin.port !== '' && origin.port !== '18080' && origin.pathname === '/' &&
+  origin.port !== '' && !['18080', '18090'].includes(origin.port) && origin.pathname === '/' &&
   !origin.username && !origin.password && !origin.search && !origin.hash,
 'Use a dedicated loopback fixture.');
 assert.ok(['enabled', 'disabled'].includes(mode));

@@ -5,7 +5,7 @@ import { AssistantClient } from '../packages/contracts/dist/index.js';
 
 const origin = new URL(process.argv[2]);
 assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port
-  && origin.port !== '18080', 'Use a dedicated loopback API.');
+  && !['18080', '18090'].includes(origin.port), 'Use a dedicated loopback API.');
 const modelId = 'local-echo';
 
 async function account() {

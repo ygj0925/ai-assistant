@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 
-const origin = new URL(process.argv[2] ?? 'http://127.0.0.1:18080');
+const origin = new URL(process.argv[2] ?? 'http://127.0.0.1:18090');
 if (!['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)) {
   throw new Error('Use an isolated loopback service with synthetic accounts.');
 }
@@ -15,7 +15,7 @@ const publicationData = process.argv.includes('--artifact-publication');
 const artifactData = publicationData || process.argv.includes('--artifact-data');
 const projectData = privateData || authoredData || artifactData || process.argv.includes('--project-data');
 if (privateData || authoredData || artifactData) {
-  assert.ok(origin.port && origin.port !== '18080', 'Use an isolated private-data fixture.');
+  assert.ok(origin.port && !['18080', '18090'].includes(origin.port), 'Use an isolated private-data fixture.');
 }
 const owned = [];
 const sessions = [];

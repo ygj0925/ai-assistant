@@ -25,8 +25,8 @@ function configuration() {
   if (!values['api-url']) throw new TypeError('Provide --api-url for a dedicated loopback test API.');
   const url = new URL(values['api-url']);
   if (url.protocol !== 'http:' || !['127.0.0.1', '[::1]'].includes(url.hostname) || !url.port
-    || url.port === '18080' || url.pathname !== '/' || url.username || url.password || url.search || url.hash) {
-    throw new TypeError('Use a bare loopback HTTP origin on a dedicated port other than 18080.');
+    || ['18080', '18090'].includes(url.port) || url.pathname !== '/' || url.username || url.password || url.search || url.hash) {
+    throw new TypeError('Use a bare loopback HTTP origin on a dedicated port other than 18090.');
   }
   const concurrency = Number(values.concurrency);
   const waves = Number(values.waves);

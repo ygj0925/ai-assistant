@@ -65,7 +65,7 @@ assert.ok(['normal', 'restore', 'disabled', 'offline-scanner', 'quota', 'toggle'
 function loopback(raw) {
   const value = new URL(raw);
   assert.ok(value.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(value.hostname)
-    && value.port && value.port !== '18080' && value.href === value.origin + '/');
+    && value.port && !['18080', '18090'].includes(value.port) && value.href === value.origin + '/');
   return value;
 }
 

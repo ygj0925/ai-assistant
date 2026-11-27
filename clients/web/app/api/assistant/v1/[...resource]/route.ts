@@ -36,7 +36,7 @@ async function proxy(request: NextRequest, context: Context) {
 
   let origin: URL;
   try {
-    origin = new URL(process.env.ASSISTANT_API_ORIGIN || "http://127.0.0.1:18080");
+    origin = new URL(process.env.ASSISTANT_API_ORIGIN || "http://127.0.0.1:18090");
   } catch {
     return apiError(500, "INTERNAL_ERROR", "助手服务地址配置无效。");
   }

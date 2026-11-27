@@ -10,11 +10,13 @@
 npm ci --prefix ../../packages/contracts
 npm run generate --prefix ../../packages/contracts
 npm ci
-$env:ASSISTANT_API_ORIGIN = 'http://127.0.0.1:18080'
+$env:ASSISTANT_API_ORIGIN = 'http://127.0.0.1:18090'
 npm run dev
 ```
 
 访问 [本地 Web 工作区](http://localhost:3000)。Web 通过同源 `/api/assistant/v1` 路由访问助手后端。后端需要启用用户注册和至少一个文本模型。登录凭据、浏览中的运行游标和草稿保存在当前页面的内存中，退出会话时清除。
+
+也可将 `.env.example` 复制为 `.env.local` 保存 `ASSISTANT_API_ORIGIN`。该变量由 Web 服务端读取，修改后重启 Web；如果终端已设置同名环境变量，以终端的值为准。API 默认端口为 `18090`，Web 默认端口仍为 `3000`。
 
 登录后可从历史回复提交举报。侧栏头像可查看生成额度和预留，或下载当前工作空间的个人数据。导出每次生成一份 JSON，界面会提示是否还有下一份。 [举报和后台权限](../../qa/assistant-moderation.md) · [个人数据导出](../../qa/assistant-privacy-export.md)
 
@@ -45,7 +47,7 @@ npm test
 启动本地实际助手后端并启用 `local-echo` 后，可执行后端联调。联调会向测试后端注册隔离账号并创建和删除临时对话。
 
 ```powershell
-$env:ASSISTANT_WEB_TEST_API_ORIGIN = 'http://127.0.0.1:18080'
+$env:ASSISTANT_WEB_TEST_API_ORIGIN = 'http://127.0.0.1:18090'
 npm test
 ```
 

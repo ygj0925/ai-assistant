@@ -2,6 +2,8 @@
 
 这个独立工程包含跨平台 AI 助手的客户端、后端和验收工具。
 
+本地默认数据库名为 `ai_assistant`，助手 API 地址为 `http://127.0.0.1:18090`，Web 和桌面页面入口为 `http://127.0.0.1:3000`。Web 的 `ASSISTANT_API_ORIGIN` 指向 API，桌面的 `ASSISTANT_DESKTOP_WEB_ORIGIN` 指向 Web。数据库连接与密码见 [本地依赖配置](infra/local/README.md)。
+
 | 目录 | 内容 |
 | --- | --- |
 | [docs](docs/总体规划书.md) | 总体规划、架构和风险审查 |

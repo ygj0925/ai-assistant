@@ -24,7 +24,7 @@
 
 ```ts
 const client = new AssistantClient({
-  origin: 'http://127.0.0.1:18080',
+  origin: 'http://127.0.0.1:18090',
   clearAccountData: () => clearAccountCacheAndLocalDrafts(),
 });
 await client.replaceSession(await client.login(credentials));

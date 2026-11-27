@@ -10,7 +10,7 @@ assert.ok(['restore', 'enabled', 'disabled'].includes(mode), 'Choose a verificat
 function loopback(address) {
   const url = new URL(address);
   assert.ok(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) &&
-    url.port && url.port !== '18080' && url.pathname === '/' && !url.username && !url.password &&
+    url.port && !['18080', '18090'].includes(url.port) && url.pathname === '/' && !url.username && !url.password &&
     !url.search && !url.hash, 'Use a dedicated loopback API.');
   return url;
 }

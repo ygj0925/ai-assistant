@@ -23,9 +23,9 @@ npm run bundle:ios
 准备 SDK 56 版 Expo Go，启动 Android 模拟器与本机助手后端。后端需要启用账号注册和 `local-echo` 模型。
 
 ```powershell
-adb reverse tcp:18080 tcp:18080
+adb reverse tcp:18090 tcp:18090
 adb reverse tcp:3110 tcp:3110
-$env:EXPO_PUBLIC_ASSISTANT_API_ORIGIN = 'http://127.0.0.1:18080'
+$env:EXPO_PUBLIC_ASSISTANT_API_ORIGIN = 'http://127.0.0.1:18090'
 npm start -- --go --localhost --port 3110
 ```
 

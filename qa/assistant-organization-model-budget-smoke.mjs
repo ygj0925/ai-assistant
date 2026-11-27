@@ -18,7 +18,7 @@ const cap = reserve * 2;
 function local(raw) {
   const url = new URL(raw);
   assert.ok(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)
-    && url.port && url.port !== '18080' && url.href === url.origin + '/',
+    && url.port && !['18080', '18090'].includes(url.port) && url.href === url.origin + '/',
   'Use only isolated loopback budget fixtures.');
   return url;
 }

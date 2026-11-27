@@ -31,7 +31,7 @@
 按照[模型网关自测](assistant-model-gateway.md)开启隔离回环后端、测试注册与本地模型。使用专门的模拟账号运行脚本。
 
 ```powershell
-node qa/assistant-moderation-smoke.mjs http://127.0.0.1:18080
+node qa/assistant-moderation-smoke.mjs http://127.0.0.1:18090
 ```
 
 默认模式创建两个消费者测试账号，检查未登录、跨账号、跨工作空间、重复举报以及会话删除后的行为。为模拟运营端权限边界，可传入 `ASSISTANT_TEST_MODERATOR_TOKEN`。完整端到端复跑还需 `ASSISTANT_TEST_REPORT_OWNER_TOKEN` 对应模拟消费者账号的工作空间已有同一管理身份和租户的授权，且允许处置。测试用 workspace 授权可在隔离库中按当前操作者与模拟工作空间填入以下 SQL 的参数，使用参数化客户端执行。

@@ -7,7 +7,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 let origin = new URL(process.argv[2]);
-assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port && origin.port !== '18080',
+assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port && !['18080', '18090'].includes(origin.port),
   'Use a dedicated loopback fixture with synthetic accounts.');
 const evidence = process.argv[3];
 assert.ok(evidence);
@@ -16,7 +16,7 @@ const typedSwitch = process.argv.includes('--typed-switch');
 const typedRestoreIndex = process.argv.indexOf('--typed-restore');
 const typedRestore = typedRestoreIndex < 0 ? null : new URL(process.argv[typedRestoreIndex + 1]);
 assert.ok(!typedRestore || (typed && ['127.0.0.1', 'localhost', '[::1]'].includes(typedRestore.hostname)
-  && typedRestore.port && !['18080', origin.port].includes(typedRestore.port)));
+  && typedRestore.port && !['18080', '18090', origin.port].includes(typedRestore.port)));
 assert.ok(!typedSwitch || (typed && !typedRestore));
 const actors = [];
 const artifacts = '/artifacts';

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 
 const origin = new URL(process.argv[2]);
-assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port && origin.port !== '18080',
+assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port && !['18080', '18090'].includes(origin.port),
   'Use a dedicated loopback fixture with synthetic accounts.');
 const switchArgument = process.argv.indexOf('--switch');
 const evidence = switchArgument === -1 ? undefined : process.argv[switchArgument + 1];

@@ -3,13 +3,15 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { AssistantApiError, AssistantClient, decodeRunEvents, StreamProtocolError } from '../dist/index.js';
 
-const origin = 'http://127.0.0.1:18080';
+const origin = 'http://127.0.0.1:18090';
 const session = {
   accessToken: 'synthetic-test-token',
   expiresAt: '2026-11-22T13:00:00Z',
   user: { id: 'user_one', username: 'account_one', workspaceId: 'workspace_one', preferences: { locale: 'zh-CN', theme: 'system' } },
 };
-const fixture = await readFile(new URL('../examples/run-events.sse', import.meta.url), 'utf8');
+// Keep frame slicing and explicit CRLF cases independent of Git's checkout line endings.
+const fixture = (await readFile(new URL('../examples/run-events.sse', import.meta.url), 'utf8'))
+  .replaceAll('\r\n', '\n');
 
 async function collect(source) {
   const values = [];

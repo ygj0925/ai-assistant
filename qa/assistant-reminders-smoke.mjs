@@ -17,7 +17,7 @@ function isolated(url) {
   const target = new URL(url);
   assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(target.hostname) && target.port,
     'Use an isolated loopback service with synthetic accounts.');
-  assert.notEqual(target.port, '18080');
+  assert.ok(!['18080', '18090'].includes(target.port));
   return target;
 }
 

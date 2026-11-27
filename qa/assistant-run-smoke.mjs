@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 
-const base = new URL(process.argv[2] ?? 'http://127.0.0.1:18080');
+const base = new URL(process.argv[2] ?? 'http://127.0.0.1:18090');
 if (!['localhost', '127.0.0.1', '[::1]'].includes(base.hostname)) {
   throw new Error('Use an isolated local test server.');
 }

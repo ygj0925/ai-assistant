@@ -9,7 +9,7 @@ function loopback(address) {
   const value = new URL(address);
   assert.ok(['http:', 'https:'].includes(value.protocol)
     && ['127.0.0.1', 'localhost', '[::1]'].includes(value.hostname)
-    && value.port && value.port !== '18080' && value.pathname === '/'
+    && value.port && !['18080', '18090'].includes(value.port) && value.pathname === '/'
     && !value.username && !value.password && !value.search && !value.hash,
   'Use a dedicated loopback fixture.');
   return value;

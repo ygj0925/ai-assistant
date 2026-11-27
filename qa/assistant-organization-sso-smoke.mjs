@@ -21,7 +21,7 @@ const correlation = () => randomBytes(32).toString('base64url');
 function loopback(value) {
   const url = new URL(value);
   assert.ok(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)
-    && url.port && url.port !== '18080' && url.pathname === '/' && !url.username && !url.password
+    && url.port && !['18080', '18090'].includes(url.port) && url.pathname === '/' && !url.username && !url.password
     && !url.search && !url.hash, 'Use a dedicated synthetic loopback assertion fixture.');
   return url;
 }

@@ -40,7 +40,7 @@ async function* readStream(response: Response) {
 
 export function createClient(): AssistantClient | null {
   try {
-    const address = process.env.EXPO_PUBLIC_ASSISTANT_API_ORIGIN || (__DEV__ ? 'http://127.0.0.1:18080' : '');
+    const address = process.env.EXPO_PUBLIC_ASSISTANT_API_ORIGIN || (__DEV__ ? 'http://127.0.0.1:18090' : '');
     const origin = new URL(address);
     if (origin.protocol !== 'https:' && !(__DEV__ && ['127.0.0.1', 'localhost'].includes(origin.hostname))) {
       return null;

@@ -1,6 +1,6 @@
 # 本地依赖和验收
 
-这套环境提供 PostgreSQL、Redis 和 SeaweedFS S3。服务端口只绑定到回环地址。PostgreSQL 的业务数据库为 `assistant`，用户为 `assistant`。迁移测试使用独立普通用户 `assistant_qa` 与专用临时数据库。
+这套环境提供 PostgreSQL、Redis 和 SeaweedFS S3。服务端口只绑定到回环地址。PostgreSQL 的业务数据库为 `ai_assistant`，用户为 `assistant`。迁移测试使用独立普通用户 `assistant_qa` 与专用临时数据库。
 
 ## 启动
 
@@ -15,11 +15,15 @@ docker compose --env-file infra/local/.env -f infra/local/compose.yaml up -d --w
 
 | 服务 | 本地地址 | 应用参数 |
 | --- | --- | --- |
-| PostgreSQL | `127.0.0.1:25432` | `ASSISTANT_DB_JDBC_URL=jdbc:postgresql://127.0.0.1:25432/assistant?stringtype=unspecified`，`DB_USER=assistant`，`DB_PWD` 取 `ASSISTANT_DB_PASSWORD` |
+| PostgreSQL | `127.0.0.1:25432` | `DB_NAME=ai_assistant`，`DB_USER=assistant`，`DB_PWD` 取 `ASSISTANT_DB_PASSWORD`；完整 URL 可用 `ASSISTANT_DB_JDBC_URL=jdbc:postgresql://127.0.0.1:25432/ai_assistant?stringtype=unspecified` 覆盖 |
 | Redis | `127.0.0.1:26379` | `REDIS_HOST=127.0.0.1`，`REDIS_PORT=26379`，`REDIS_PWD` 取 `ASSISTANT_REDIS_PASSWORD` |
 | S3 | `http://127.0.0.1:28333` | 区域 `us-east-1`，桶 `assistant-local`，使用路径式地址和本地 S3 凭据 |
 
 后端启用 `dev,postgres` 配置启动后，Liquibase 在业务数据库应用 PostgreSQL 迁移。原生 S3 客户端可在 `infra/local/.env` 中读取 `ASSISTANT_S3_ACCESS_KEY` 和 `ASSISTANT_S3_SECRET_KEY`，用于访问本地桶。数据库和对象数据保存在项目专用的 Docker 卷中。
+
+`infra/local/.env` 供 Compose 读取，Java 进程不会自动读取该文件。启动 Java 前需注入上表的数据库、Redis 连接变量。后端默认监听 `18090`，可用 `SERVER_PORT` 覆盖；改变端口后同步设置 Web 的 `ASSISTANT_API_ORIGIN` 和移动端的 `EXPO_PUBLIC_ASSISTANT_API_ORIGIN`。本地 Web 为 `http://127.0.0.1:3000`，后端的 `ASSISTANT_WEB_ORIGIN` 与桌面的 `ASSISTANT_DESKTOP_WEB_ORIGIN` 使用该地址。
+
+首次初始化前，可在 `.env` 中设置 `DB_NAME` 更换库名，并在 Java 环境中设置相同值。已设置的 `ASSISTANT_DB_JDBC_URL` 优先于 `DB_NAME`、`DB_HOST`、`DB_PORT`，旧 URL 需要同时更新。修改库名不会重命名已有数据库，已有 PostgreSQL 数据卷也不会重跑初始化 SQL；如要继续使用旧库 `assistant`，两端显式设置 `DB_NAME=assistant`。如需使用新库，应先创建由 `assistant` 用户持有的 `ai_assistant` 库，再按需迁移原数据。
 
 ## 自测
 

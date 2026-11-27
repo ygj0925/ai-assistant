@@ -13,7 +13,7 @@ const web = join(project, 'clients', 'web');
 const windows = process.platform === 'win32';
 const suiteNames = ['contracts', 'backend', 'api', 'web'];
 const usage = `Usage: node qa/verify.mjs [--only contracts,backend,api,web]
-  --api-url URL          Standard loopback API origin (default http://127.0.0.1:18080)
+  --api-url URL          Standard loopback API origin (default http://127.0.0.1:18090)
   --expired-api-url URL  Additional loopback API origin with a small event-retention limit
   --skip-install         Reuse existing npm dependencies and Playwright Chromium
   --with-browser-deps    Install Chromium system dependencies with Playwright`;
@@ -70,7 +70,7 @@ async function run(check, directory) {
 async function main() {
   const { values } = parseArgs({ options: {
     only: { type: 'string', default: suiteNames.join(',') },
-    'api-url': { type: 'string', default: 'http://127.0.0.1:18080' },
+    'api-url': { type: 'string', default: 'http://127.0.0.1:18090' },
     'expired-api-url': { type: 'string' },
     'skip-install': { type: 'boolean' },
     'with-browser-deps': { type: 'boolean' },

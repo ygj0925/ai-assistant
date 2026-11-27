@@ -38,7 +38,7 @@
 使用隔离 PostgreSQL、Redis、测试注册和本地合成模型启动后端。脚本只连接回环地址，使用现建的模拟账号。 [模型网关自测](assistant-model-gateway.md)
 
 ```powershell
-node qa/assistant-privacy-export-smoke.mjs http://127.0.0.1:18080
+node qa/assistant-privacy-export-smoke.mjs http://127.0.0.1:18090
 ```
 
 需要核验资料与分析时，使用独立回环测试服务，开启注册、资料、分析及[独立删除日志](assistant-erasure.md)，再运行同一脚本的扩展用例。扩展用例生成 58 条有效资料，覆盖共享分页、中文和 emoji、CSV 原始数据、跨账号隔离、资料与衍生报告撤回。后台会话分支导出继续使用原有的 Markdown 附件和摘要校验，可独立复跑。 [后台任务验收](assistant-jobs.md)

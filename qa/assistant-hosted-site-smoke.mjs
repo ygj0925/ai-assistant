@@ -8,7 +8,7 @@ function loopback(value) {
   const origin = new URL(value);
   assert.ok(origin.protocol === 'http:' && origin.port && !origin.username && !origin.password
     && ['127.0.0.1', 'localhost'].includes(origin.hostname) && origin.pathname === '/'
-    && !origin.hash && !origin.search && origin.port !== '18080', 'Use isolated localhost fixtures.');
+    && !origin.hash && !origin.search && !['18080', '18090'].includes(origin.port), 'Use isolated localhost fixtures.');
   return origin;
 }
 

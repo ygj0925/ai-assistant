@@ -6,7 +6,7 @@
 
 ## 运行
 
-使用独立 PostgreSQL 和 Redis 启动回环测试服务，打开消费者注册。开启资料能力需要 `--assistant.project-resources.enabled=true` 和[已绑定且可写的独立删除日志](assistant-erasure.md)。脚本只接受显式测试端口并拒绝常用的 18080。测试账号、文本和资料均由脚本合成。
+使用独立 PostgreSQL 和 Redis 启动回环测试服务，打开消费者注册。开启资料能力需要 `--assistant.project-resources.enabled=true` 和[已绑定且可写的独立删除日志](assistant-erasure.md)。脚本只接受显式测试端口并拒绝常用的 18090。测试账号、文本和资料均由脚本合成。
 
 MySQL 开发配置和 PostgreSQL 配置都使用直连 JDBC。运行私有资料服务时，应继续关闭会输出 SQL 绑定值的调试日志，避免记录正文或搜索词。
 

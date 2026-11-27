@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { AssistantClient } from '../packages/contracts/dist/index.js';
 import { resolveBackend } from './backend-checkout.mjs';
 
-const origin = 'http://127.0.0.1:18080';
+const origin = 'http://127.0.0.1:18090';
 const backend = resolveBackend(fileURLToPath(new URL('..', import.meta.url)));
 const owner = new AssistantClient({ origin });
 const stranger = new AssistantClient({ origin });

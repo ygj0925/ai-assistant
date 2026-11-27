@@ -52,10 +52,10 @@ async function smoke() {
   assert.ok(snapshotIndex < 0 || snapshotDirectory, 'Provide a fresh share membership fixture directory.');
   assert.ok(!snapshotDirectory || !replayDirectory, 'Run each fixture mode independently.');
   assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname), 'Use an isolated loopback API.');
-  assert.ok(origin.port && origin.port !== '18080', 'Use a distinct test service port.');
+  assert.ok(origin.port && !['18080', '18090'].includes(origin.port), 'Use a distinct test service port.');
   if (restored) {
     assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(restored.hostname));
-    assert.ok(restored.port && restored.port !== '18080' && restored.port !== origin.port);
+    assert.ok(restored.port && !['18080', '18090'].includes(restored.port) && restored.port !== origin.port);
   }
   const accounts = [];
   const uploads = [];

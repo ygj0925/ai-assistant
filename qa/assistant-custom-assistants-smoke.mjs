@@ -15,7 +15,7 @@ function isolated(address) {
   const parsed = new URL(address);
   assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname) && parsed.port,
     'Use an isolated loopback fixture.');
-  assert.notEqual(parsed.port, '18080');
+  assert.ok(!['18080', '18090'].includes(parsed.port));
   return parsed;
 }
 

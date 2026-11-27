@@ -8,7 +8,7 @@
 Push-Location services/api
 .\mvnw.cmd -B -pl :continew-server -am verify
 Push-Location continew-server/target/app
-java -jar bin/continew-admin.jar --spring.profiles.active=dev,postgres --server.address=127.0.0.1 --server.port=18080 --assistant.enabled=true --assistant.auth.registration-enabled=true
+java -jar bin/continew-admin.jar --spring.profiles.active=dev,postgres --server.address=127.0.0.1 --server.port=18090 --assistant.enabled=true --assistant.auth.registration-enabled=true
 Pop-Location
 Pop-Location
 ```

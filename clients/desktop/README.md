@@ -8,6 +8,8 @@ Electron 宿主在 Windows 和 macOS 复用青屿助手的 Web 界面。渲染�
 
 在本目录使用 Node.js 22.12 或更新版本。先启动 Web 工程，默认本机入口为 `http://127.0.0.1:3000`。需要聊天联调时，在 Web 工程配置其所用的助手后端。
 
+助手 API 默认地址为 `http://127.0.0.1:18090`，在 Web 进程中通过 `ASSISTANT_API_ORIGIN` 设置。桌面的 `ASSISTANT_DESKTOP_WEB_ORIGIN` 继续指向 Web 的 `3000` 端口。
+
 ```powershell
 npm ci
 $env:ASSISTANT_DESKTOP_WEB_ORIGIN = 'http://127.0.0.1:3000'
@@ -25,6 +27,8 @@ npm start
 ### 桌面接续
 
 使用本机开发实例时，将 `ASSISTANT_DESKTOP_COMPANION_API_ORIGIN` 设为 API 的 `http://127.0.0.1:<端口>`，然后从工作台的「桌面接续」登录。生成配对码后，用同一账号的 Android 调试端输入，回到桌面确认配对。选择、查看并确认审阅一个修订后，点「交给手机核对当前修订」。手机批准后，桌面需另外点「按手机批准验证」。修改修订、撤销目录授权或退出会中止旧任务。配对、批准和记录只在当前开发服务进程内有效。正式构建工作流使用本地代码工作台的一般验证入口。 [桌面接续验收](../../qa/assistant-desktop-companion.md)
+
+使用默认后端时，在启动桌面端的终端设置 `$env:ASSISTANT_DESKTOP_COMPANION_API_ORIGIN = 'http://127.0.0.1:18090'`。
 
 ## 打包和自测
 

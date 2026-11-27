@@ -9,7 +9,7 @@ assert.ok(['enabled', 'disabled'].includes(mode));
 assert.equal(Boolean(directory), mode === 'enabled');
 const origin = new URL(source);
 assert.ok(origin.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)
-  && origin.port && origin.port !== '18080' && origin.pathname === '/' && !origin.username
+  && origin.port && !['18080', '18090'].includes(origin.port) && origin.pathname === '/' && !origin.username
   && !origin.password && !origin.search && !origin.hash, 'Use a dedicated synthetic loopback API.');
 const evidence = directory && resolve(directory);
 if (evidence) await mkdir(evidence, { recursive: true });

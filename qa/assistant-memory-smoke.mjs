@@ -9,9 +9,9 @@ assert.ok(address, 'Specify an isolated QA API origin.');
 const origin = new URL(address);
 assert.ok(['http:', 'https:'].includes(origin.protocol) &&
   ['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname) && origin.port &&
-  origin.port !== '18080' && origin.pathname === '/' && !origin.username && !origin.password &&
+  !['18080', '18090'].includes(origin.port) && origin.pathname === '/' && !origin.username && !origin.password &&
   !origin.search && !origin.hash,
-'Use a dedicated loopback API on an explicit QA port other than 18080.');
+'Use a dedicated loopback API on an explicit QA port other than 18090.');
 assert.ok(['normal', 'disabled', 'restore'].includes(mode), 'Unknown memory verification mode.');
 assert.equal(Boolean(evidenceDirectory), mode === 'restore', 'Restore mode requires a fresh evidence directory.');
 

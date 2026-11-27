@@ -7,7 +7,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 function loopback(value) {
   const endpoint = new URL(value);
   assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(endpoint.hostname)
-    && endpoint.port && endpoint.port !== '18080', 'Use a dedicated loopback QA instance.');
+    && endpoint.port && !['18080', '18090'].includes(endpoint.port), 'Use a dedicated loopback QA instance.');
   return endpoint;
 }
 

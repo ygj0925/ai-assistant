@@ -7,7 +7,7 @@ import { crc32, deflateSync } from 'node:zlib';
 
 const local = (value) => {
   const url = new URL(value);
-  assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) && url.port && url.port !== '18080',
+  assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) && url.port && !['18080', '18090'].includes(url.port),
     'Use an isolated loopback API and synthetic accounts.');
   return url;
 };

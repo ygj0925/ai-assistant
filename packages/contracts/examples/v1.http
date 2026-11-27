@@ -1,4 +1,4 @@
-@origin = http://127.0.0.1:18080
+@origin = http://127.0.0.1:18090
 @api = {{origin}}/api/assistant/v1
 @accessToken = replace-with-local-session-token
 @workspaceId = replace-with-local-workspace-id

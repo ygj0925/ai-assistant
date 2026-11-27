@@ -6,7 +6,7 @@
 
 ```powershell
 $env:ASSISTANT_QA_EXPECT_SESSION_REVOCATION = 'true'
-node qa/assistant-run-smoke.mjs http://127.0.0.1:18080
+node qa/assistant-run-smoke.mjs http://127.0.0.1:18090
 Remove-Item Env:ASSISTANT_QA_EXPECT_SESSION_REVOCATION
 ```
 

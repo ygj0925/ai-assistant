@@ -10,7 +10,7 @@ assert.ok(['restore', 'disabled'].includes(mode), 'Use an isolated publication/r
 function loopback(address) {
   const value = new URL(address);
   assert.ok(value.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(value.hostname)
-    && value.port && value.port !== '18080' && value.pathname === '/'
+    && value.port && !['18080', '18090'].includes(value.port) && value.pathname === '/'
     && !value.username && !value.password && !value.search && !value.hash);
   return value;
 }

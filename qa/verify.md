@@ -11,7 +11,7 @@ API 层使用已启动的隔离服务。标准服务需要 PostgreSQL、Redis、
 ```powershell
 node qa/verify.mjs --only contracts,web
 node qa/verify.mjs --only backend
-node qa/verify.mjs --only api --api-url http://127.0.0.1:18080 --expired-api-url http://127.0.0.1:18081
+node qa/verify.mjs --only api --api-url http://127.0.0.1:18090 --expired-api-url http://127.0.0.1:18081
 node qa/verify.mjs --only contracts,web --skip-install
 ```
 

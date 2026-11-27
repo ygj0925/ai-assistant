@@ -13,7 +13,7 @@ let api = isolated(process.argv[2]);
 
 function isolated(value) {
   const url = new URL(value);
-  assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) && url.port && url.port !== '18080',
+  assert.ok(['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) && url.port && !['18080', '18090'].includes(url.port),
     'Use a dedicated loopback fixture with synthetic accounts.');
   return url;
 }

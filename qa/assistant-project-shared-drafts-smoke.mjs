@@ -11,7 +11,7 @@ assert.ok(directory, 'Provide a new synthetic evidence directory.');
 function loopback(address) {
   const url = new URL(address);
   assert.ok(url.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)
-    && url.port && url.port !== '18080' && url.pathname === '/'
+    && url.port && !['18080', '18090'].includes(url.port) && url.pathname === '/'
     && !url.username && !url.password && !url.search && !url.hash);
   return url;
 }

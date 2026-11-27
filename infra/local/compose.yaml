@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${ASSISTANT_PG_ADMIN_PASSWORD:?Run node infra/local/init-env.mjs first}
       POSTGRES_DB: postgres
+      DB_NAME: ${DB_NAME:-ai_assistant}
       ASSISTANT_DB_PASSWORD: ${ASSISTANT_DB_PASSWORD:?Run node infra/local/init-env.mjs first}
       ASSISTANT_QA_DB_PASSWORD: ${ASSISTANT_QA_DB_PASSWORD:?Run node infra/local/init-env.mjs first}
     ports:

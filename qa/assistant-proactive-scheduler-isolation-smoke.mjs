@@ -7,7 +7,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 const [address, directory] = process.argv.slice(2);
 const origin = new URL(address);
 assert.ok(origin.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)
-  && origin.port && origin.port !== '18080' && origin.pathname === '/' && !origin.username
+  && origin.port && !['18080', '18090'].includes(origin.port) && origin.pathname === '/' && !origin.username
   && !origin.password && !origin.search && !origin.hash, 'Use a dedicated synthetic loopback API.');
 assert.ok(directory, 'Provide a new isolated evidence directory.');
 const evidence = resolve(directory);

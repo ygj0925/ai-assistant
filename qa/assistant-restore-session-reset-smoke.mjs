@@ -9,7 +9,7 @@ assert.ok(directory, 'Pass a new verification directory.');
 
 function loopback(input) {
   const url = new URL(input);
-  assert.ok(url.protocol === 'http:' && url.hostname === '127.0.0.1' && url.port && url.port !== '18080'
+  assert.ok(url.protocol === 'http:' && url.hostname === '127.0.0.1' && url.port && !['18080', '18090'].includes(url.port)
     && url.href === url.origin + '/', 'Use isolated synthetic loopback fixtures.');
   return url.origin;
 }
